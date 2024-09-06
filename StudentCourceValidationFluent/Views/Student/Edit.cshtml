@@ -1,0 +1,53 @@
+﻿
+@model StudentCourceValidationFluent.Models.Student
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+    <div>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <h4>Student</h4>
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name)
+                    @Html.TextBoxFor(m => m.Name)
+                    @Html.ValidationMessageFor(m => m.Name)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Age)
+                    @Html.EditorFor(m => m.Age)
+                    @Html.ValidationMessageFor(m => m.Age)
+                </div>
+
+                <h4>Course</h4>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Course.Name, "Course Name")
+                    @Html.TextBoxFor(m => m.Course.Name)
+                    @Html.ValidationMessageFor(m => m.Course.Name)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Course.Duration, "Course Duration (Years)")
+                    @Html.EditorFor(m => m.Course.Duration)
+                    @Html.ValidationMessageFor(m => m.Course.Duration)
+                </div>
+
+                <input type="submit" value="Save" class="btn btn-primary" />
+                }
+                }
+
+            </div>
+    </body>
+</html>

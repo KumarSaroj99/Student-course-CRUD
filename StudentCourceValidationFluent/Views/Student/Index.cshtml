@@ -1,0 +1,41 @@
+﻿
+@model IEnumerable<StudentCourceValidationFluent.Models.Student>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+
+
+        <h2>Students</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Course</th>
+                <th>Actions</th>
+            </tr>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.Name</td>
+                    <td>@student.Age</td>
+                    <td>@student.Course.Name</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = student.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = student.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = student.Id })
+                    </td>
+                </tr>
+            }
+        </table>
+        <p>@Html.ActionLink("Create New Student", "Create")</p>
+
+    </div>
+</body>
+</html>
