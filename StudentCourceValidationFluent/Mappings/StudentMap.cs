@@ -5,6 +5,7 @@ using System.Web;
 
 namespace StudentCourceValidationFluent.Mappings
 {
+    using System.Net;
     using FluentNHibernate.Mapping;
     using StudentCourceValidationFluent.Models;
 
@@ -14,10 +15,11 @@ namespace StudentCourceValidationFluent.Mappings
         {
             Table("Students");
             Id(x => x.Id).GeneratedBy.Identity();
-            Map(x => x.Name).Not.Nullable();
-            Map(x => x.Age).Not.Nullable();
+            Map(x => x.Name);
+            Map(x => x.Age);
             HasOne(u => u.Course).Cascade.All().PropertyRef(u => u.Student).Constrained();  // Specify reverse relationship
         }
+        
     }
 
 }

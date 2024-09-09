@@ -14,6 +14,7 @@ namespace StudentCourceValidationFluent.Controllers
 
     public class StudentController : Controller
     {
+        
         // List all students
         public ActionResult Index()
         {
@@ -33,28 +34,25 @@ namespace StudentCourceValidationFluent.Controllers
         [HttpPost]
         public ActionResult Create(Student student)
         {
-            if (ModelState.IsValid)
+           using(var session = NHibernateHelper.CreateSession())
             {
-                using (var session = NHibernateHelper.CreateSession())
+                using(var transaction = session.BeginTransaction())
                 {
-                    using (var transaction = session.BeginTransaction())
-                    {
-                        session.Save(student);
-                        transaction.Commit();
-                    }
+                    student.Course.Student=student;
+                    session.Save(student);
+                    transaction.Commit();
                     return RedirectToAction("Index");
                 }
             }
-            return View(student);
         }
+
 
         // Edit student
         public ActionResult Edit(int id)
         {
             using (var session = NHibernateHelper.CreateSession())
             {
-                var student = session.Get<Student>(id);
-                if (student == null) return HttpNotFound();
+                var student = session.Query<Student>().SingleOrDefault(u => u.Id == id);
                 return View(student);
             }
         }
@@ -62,19 +60,17 @@ namespace StudentCourceValidationFluent.Controllers
         [HttpPost]
         public ActionResult Edit(Student student)
         {
-            if (ModelState.IsValid)
+            using (var session = NHibernateHelper.CreateSession())
             {
-                using (var session = NHibernateHelper.CreateSession())
+                using (var transaction = session.BeginTransaction())
                 {
-                    using (var transaction = session.BeginTransaction())
-                    {
-                        session.Update(student);
-                        transaction.Commit();
-                    }
+                    student.Course.Student= student;
+                    session.Update(student);
+                    transaction.Commit();
                     return RedirectToAction("Index");
                 }
             }
-            return View(student);
+            
         }
 
         // Delete student
@@ -82,8 +78,7 @@ namespace StudentCourceValidationFluent.Controllers
         {
             using (var session = NHibernateHelper.CreateSession())
             {
-                var student = session.Get<Student>(id);
-                if (student == null) return HttpNotFound();
+                var student = session.Query<Student>().SingleOrDefault(u => u.Id == id);
                 return View(student);
             }
         }
@@ -93,16 +88,22 @@ namespace StudentCourceValidationFluent.Controllers
         {
             using (var session = NHibernateHelper.CreateSession())
             {
-                var student = session.Get<Student>(id);
-                if (student != null)
+                using (var transaction = session.BeginTransaction())
                 {
-                    using (var transaction = session.BeginTransaction())
-                    {
-                        session.Delete(student);
-                        transaction.Commit();
-                    }
+                    var student = session.Query<Student>().SingleOrDefault(u => u.Id == id);
+                    session.Delete(student);
+                    transaction.Commit();
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
+            }
+            
+        }
+        public ActionResult Details(int id)
+        {
+            using(var session = NHibernateHelper.CreateSession())
+            {
+                var student = session.Query<Student>().SingleOrDefault(u=>u.Id==id);
+                return View(student);
             }
         }
     }

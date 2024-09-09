@@ -5,6 +5,7 @@ using System.Web;
 
 namespace StudentCourceValidationFluent.Mappings
 {
+    using System.Net;
     using FluentNHibernate.Mapping;
     using StudentCourceValidationFluent.Models;
 
@@ -14,10 +15,11 @@ namespace StudentCourceValidationFluent.Mappings
         {
             Table("Courses");
             Id(x => x.Id).GeneratedBy.Identity();
-            Map(x => x.Name).Not.Nullable();
-            Map(x => x.Duration).Not.Nullable();
+            Map(x => x.Name);
+            Map(x => x.Duration);
             References(a => a.Student).Column("student_id").Unique().Cascade.None();  // Foreign key to Student
         }
     }
+    
 
 }
